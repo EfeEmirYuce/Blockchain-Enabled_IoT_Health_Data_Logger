@@ -13,6 +13,18 @@ st.set_page_config(page_title="IoT Sensor Dashboard", page_icon="📊", layout="
 
 DATA_FILE = "data/sensor_logs.jsonl"
 
+WALLET_FILE = "data/user_wallet.txt"
+
+def save_wallet(wallet):
+    with open(WALLET_FILE, "w") as f:
+        f.write(wallet)
+
+def load_wallet():
+    if not os.path.exists(WALLET_FILE):
+        return None
+    with open(WALLET_FILE) as f:
+        return f.read().strip()
+
 def load_data():
     if not os.path.exists(DATA_FILE): return pd.DataFrame()
     data = []
@@ -33,6 +45,15 @@ hashed_password = bcrypt.hashpw(password_plain.encode(), bcrypt.gensalt()).decod
 config = {'credentials': {'usernames': {'admin': {'name': 'Admin', 'password': hashed_password, 'email': 'admin@test.com'}}}, 'cookie': {'expiry_days': 1, 'key': 'secret_key', 'name': 'cookie_name'}, 'preauthorized': {'emails': []}}
 authenticator = stauth.Authenticate(config['credentials'], config['cookie']['name'], config['cookie']['key'], config['cookie']['expiry_days'])
 authenticator.login('main')
+
+st.markdown("### 🔗 Bağlı Wallet")
+
+wallet = load_wallet()
+
+if wallet:
+    st.success(f"Connected Wallet: {wallet}")
+else:
+    st.warning("Wallet bağlı değil")
 
 if st.session_state["authentication_status"]:
     with st.sidebar:

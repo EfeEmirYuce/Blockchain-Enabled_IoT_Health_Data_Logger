@@ -52,7 +52,12 @@ def deploy_contract():
 
     # Deploy
     HealthLogger = w3.eth.contract(abi=abi, bytecode=bytecode)
-    tx_hash = HealthLogger.constructor().transact()
+    user_wallet = load_user_wallet()
+
+    tx_hash = contract_instance.functions.addHash(
+        data_hash,
+        user_wallet
+    ).transact()
     tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
 
     print(f"[SYSTEM] Contract Deployed at: {tx_receipt.contractAddress}")
@@ -129,3 +134,10 @@ try:
     client.loop_forever()
 except Exception as e:
     print(f"[FATAL] Could not connect to MQTT: {e}")
+
+
+def load_user_wallet():
+    if not os.path.exists(USER_WALLET_FILE):
+        return "0x0000000000000000000000000000000000000000"
+    with open(USER_WALLET_FILE) as f:
+        return f.read().strip()

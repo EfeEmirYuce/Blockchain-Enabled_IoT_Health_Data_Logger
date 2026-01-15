@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Connect Wallet</title>
+</head>
+<body>
+<h2>🔐 Wallet Bağla</h2>
+<button onclick="connectWallet()">Connect MetaMask</button>
+<p id="wallet"></p>
+
+<script>
+    async function connectWallet() {
+        if (typeof window.ethereum === 'undefined') {
+            alert("MetaMask yüklü değil!");
+            return;
+        }
+
+        const accounts = await window.ethereum.request({
+            method: 'eth_requestAccounts'
+        });
+
+        const wallet = accounts[0];
+        document.getElementById("wallet").innerText =
+            "Connected Wallet: " + wallet;
+
+        // Wallet adresini backend’e gönder
+        await fetch("/save_wallet", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ wallet })
+        });
+    }
+</script>
+</body>
+</html>
