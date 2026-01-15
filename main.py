@@ -39,16 +39,12 @@ def deploy_contract():
     with open(SOL_FILE, "r") as file:
         source_content = file.read()
 
-    # Derleme ayarları
     compiled_sol = compile_standard({
         "language": "Solidity",
         "sources": {SOL_FILE: {"content": source_content}},
         "settings": {"outputSelection": {"*": {"*": ["abi", "evm.bytecode"]}}},
     }, solc_version='0.8.0')
 
-    # --- DÜZELTME BURADA YAPILDI ---
-    # Eski hatalı satır: abi = json.loads(...metadata...)["output"]["abi"]
-    # Yeni doğrusu: Doğrudan ["abi"] anahtarını alıyoruz.
     
     contract_interface = compiled_sol["contracts"][SOL_FILE]["HealthLogger"]
     bytecode = contract_interface["evm"]["bytecode"]["object"]
