@@ -21,7 +21,6 @@ docker-compose logs -f
 Bash
 
 docker-compose down
-
 4. Check logs: check system logs.
 
 docker-compose logs -f app
@@ -29,14 +28,17 @@ docker-compose logs -f app
 5. Blockchain: Read data from blokchain.
 
 docker-compose exec app
-
 🔍 How to Verify Data
 
 Once the system is running:
 
     Open your browser and go to http://localhost:8501.
 
-    Login by "admin" as username and "123" as password (just demo)
+    Click "Connect Wallet"
+
+    Approve the connection request in the MetaMask popup.
+
+        Once connected, click "Verify" on any data row to perform an on-chain check using your own account.
 
     View the incoming live sensor data.
 
@@ -48,10 +50,14 @@ Once the system is running:
 
     Smart Contract: Solidity-based immutable registry on Ethereum (Ganache).
 
+    Wallet Integration: Users can connect their MetaMask wallets to the web dashboard.
+
+    Decentralized Verification: Verification requests are signed and executed directly via the user's wallet, ensuring non-repudiation.
+
 👥 Team
 
 Developed for Muğla Sıtkı Koçman University - CENG 3550.
 
     İbrahim Yörük - Hardware & IoT
 
-    Efe Emir Yüce - Blockchain & Software Architectureß
+    Efe Emir Yüce - Blockchain & Software Architecture
