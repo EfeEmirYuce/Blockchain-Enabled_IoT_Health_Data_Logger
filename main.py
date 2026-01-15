@@ -60,8 +60,14 @@ def deploy_contract():
     tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
 
     print(f"[SYSTEM] Contract Deployed at: {tx_receipt.contractAddress}")
-    
+
+    with open("data/contract_address.txt", "w") as f:
+        f.write(tx_receipt.contractAddress)
+    print("Contract address saved to data/contract_address.txt")
+    # -------------------------------------------------
+
     return w3.eth.contract(address=tx_receipt.contractAddress, abi=abi)
+    
 
 # Initialize Contract
 contract_instance = deploy_contract()

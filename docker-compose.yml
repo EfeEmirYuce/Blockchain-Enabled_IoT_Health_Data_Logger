@@ -31,5 +31,18 @@ services:
       # IMPORTANT: Use a unique topic to avoid noise from others
       # Change 'erinc_project_123' to something unique
       - MQTT_TOPIC=ceng3550/health_data
+  dashboard:
+    build: .
+    container_name: iot_dashboard
+    command: streamlit run dashboard.py --server.port=8501 --server.address=0.0.0.0
+    ports:
+      - "8501:8501" # Web tarayıcı portu
+    volumes:
+      - .:/app # Kod değişikliklerini anında gör
+      - ./data:/app/data # Veri dosyasına erişebilsin diye
+    environment:
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - app # Veri toplayıcı çalışmadan dashboard çalışmasın
 
     restart: unless-stopped
