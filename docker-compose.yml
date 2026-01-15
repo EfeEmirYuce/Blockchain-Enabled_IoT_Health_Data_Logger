@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  # 1. Local Blockchain Service (Ganache)
+  ganache:
+    image: trufflesuite/ganache:latest
+    container_name: ganache_node
+    ports:
+      - "8545:8545"
+    # Mnemonic ensures we get the same private keys every restart
+    command: --host 0.0.0.0 --port 8545 --mnemonic "code coffee keyboard linux embedded fpga signal wireless connection"
+
+  # 2. Python Application Service
+  app:
+    build: .
+    container_name: mqtt_blockchain_bridge
+    volumes:
+      - .:/app
+      # Maps local 'data' folder to container to persist logs
+      - ./data:/app/data
+    depends_on:
+      - ganache
+    environment:
+      # Blockchain Config
+      - GANACHE_URL=http://ganache:8545
+
+      # HiveMQ Public Broker Config
+      - MQTT_BROKER=broker.hivemq.com
+      - MQTT_PORT=1883
+
+      # IMPORTANT: Use a unique topic to avoid noise from others
+      # Change 'erinc_project_123' to something unique
+      - MQTT_TOPIC=ceng3550/health_data
+
+    restart: unless-stopped
