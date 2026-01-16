@@ -4,3 +4,5 @@ py-solc-x>=1.1.1
 streamlit
 streamlit-authenticator
 pandas
+streamlit-javascript
+streamlit-js-eval

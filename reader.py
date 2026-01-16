@@ -27,7 +27,8 @@ def read_contract_data(contract_address):
         "settings": {"outputSelection": {"*": {"*": ["abi"]}}},
     }, solc_version='0.8.0')
 
-
+    # --- DÜZELTME BURADA ---
+    # Metadata parsing yerine doğrudan ABI alıyoruz
     abi = compiled_sol["contracts"][SOL_FILE]["HealthLogger"]["abi"]
 
     address = w3.to_checksum_address(contract_address)

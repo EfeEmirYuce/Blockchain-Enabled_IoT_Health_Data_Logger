@@ -2,6 +2,7 @@ import json
 import os
 from hashlib import sha256
 
+# Docker volume ile buraya bağlamıştık
 LOG_FILE = "data/sensor_logs.jsonl"
 
 def verify_data():
@@ -15,11 +16,12 @@ def verify_data():
     with open(LOG_FILE, 'r') as f:
         for line in f:
             try:
-
+                # 1. Satırı oku
                 data = json.loads(line)
                 timestamp = data.get('received_at', 'Bilinmiyor')
                 
-
+                # 2. Birebir aynı yöntemle tekrar Hash'le
+                # (Main.py'deki sıralama mantığıyla aynı olmalı: sort_keys=True)
                 data_string = json.dumps(data, sort_keys=True)
                 recalculated_hash = sha256(data_string.encode('utf-8')).hexdigest()
                 

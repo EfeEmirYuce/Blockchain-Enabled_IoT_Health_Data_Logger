@@ -39,12 +39,16 @@ def deploy_contract():
     with open(SOL_FILE, "r") as file:
         source_content = file.read()
 
+    # Derleme ayarları
     compiled_sol = compile_standard({
         "language": "Solidity",
         "sources": {SOL_FILE: {"content": source_content}},
         "settings": {"outputSelection": {"*": {"*": ["abi", "evm.bytecode"]}}},
     }, solc_version='0.8.0')
 
+    # --- DÜZELTME BURADA YAPILDI ---
+    # Eski hatalı satır: abi = json.loads(...metadata...)["output"]["abi"]
+    # Yeni doğrusu: Doğrudan ["abi"] anahtarını alıyoruz.
     
     contract_interface = compiled_sol["contracts"][SOL_FILE]["HealthLogger"]
     bytecode = contract_interface["evm"]["bytecode"]["object"]
@@ -52,12 +56,7 @@ def deploy_contract():
 
     # Deploy
     HealthLogger = w3.eth.contract(abi=abi, bytecode=bytecode)
-    user_wallet = load_user_wallet()
-
-    tx_hash = contract_instance.functions.addHash(
-        data_hash,
-        user_wallet
-    ).transact()
+    tx_hash = HealthLogger.constructor().transact()
     tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
 
     print(f"[SYSTEM] Contract Deployed at: {tx_receipt.contractAddress}")
@@ -134,10 +133,3 @@ try:
     client.loop_forever()
 except Exception as e:
     print(f"[FATAL] Could not connect to MQTT: {e}")
-
-
-def load_user_wallet():
-    if not os.path.exists(USER_WALLET_FILE):
-        return "0x0000000000000000000000000000000000000000"
-    with open(USER_WALLET_FILE) as f:
-        return f.read().strip()
