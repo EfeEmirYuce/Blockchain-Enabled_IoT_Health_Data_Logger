@@ -61,3 +61,6 @@ Developed for Muğla Sıtkı Koçman University - CENG 3550.
     İbrahim Yörük - Hardware & IoT
 
     Efe Emir Yüce - Blockchain & Software Architecture
+
+<img width="2816" height="1536" alt="System Architecture" src="https://github.com/user-attachments/assets/bc394034-101c-4fe8-b97e-d5a433ec659d" />
+
